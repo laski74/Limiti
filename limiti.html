@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limiti di Funzioni - Corso Interattivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f0f0f0;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f0f0f0;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: #333;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: -3px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .teoria-section, .exercise {
+            margin-bottom: 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .section-header, .exercise-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .section-header:hover, .exercise-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            font-size: 1.2em;
+        }
+
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .section-content, .exercise-content {
+            padding: 20px;
+            display: none;
+            background: #fafafa;
+        }
+
+        .section-content.show, .exercise-content.show {
+            display: block;
+        }
+
+        .definizione {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .definizione h4 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+
+        .teorema {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .teorema h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .esempio {
+            background: #f1f8e9;
+            border-left: 5px solid #8bc34a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .attenzione {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .attenzione h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+
+        .formula {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            border: 1px solid #ddd;
+        }
+
+        .exercise-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .solution {
+            background: #e8f5e9;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        h2 {
+            color: #667eea;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 15px 0 10px 0;
+        }
+
+        .error-box {
+            background: #fff9c4;
+            border-left: 5px solid #fbc02d;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .error-box h4 {
+            color: #f57f17;
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .pratica {
+            background: #e1bee7;
+            border-left: 5px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .pratica h4 {
+            color: #6a1b9a;
+            margin-bottom: 10px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .difficulty.facile {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medio {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .difficulty.difficile {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .gerarchia-box {
+            background: #e8eaf6;
+            border-left: 5px solid #3f51b5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .gerarchia-box h4 {
+            color: #283593;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                margin: 10px;
+            }
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Limiti di Funzioni</h1>
+            <p>Materiale didattico interattivo per studenti di 4ª superiore - Istituto Tecnico Meccanico</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'teoria')">📚 Teoria</button>
+            <button class="tab" onclick="openTab(event, 'esercizi-base')">✏️ Esercizi Base</button>
+            <button class="tab" onclick="openTab(event, 'esercizi-avanzati')">🚀 Esercizi Avanzati</button>
+        </div>
+
+        <!-- TAB TEORIA -->
+        <div id="teoria" class="tab-content active">
+            <h2>Teoria sui Limiti</h2>
+
+            <!-- Insiemi di numeri reali -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>1. Insiemi di Numeri Reali - Intervalli e Intorni</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Intervalli</h3>
+                    <p>Un <strong>intervallo</strong> è un sottoinsieme di numeri reali che corrisponde a una semiretta o a un segmento della retta reale.</p>
+                    
+                    <h4>Intervalli Limitati:</h4>
+                    <ul>
+                        <li><strong>Intervallo chiuso:</strong> $[a; b] = \{x \in \mathbb{R} : a \leq x \leq b\}$</li>
+                        <li><strong>Intervallo aperto:</strong> $]a; b[ = \{x \in \mathbb{R} : a < x < b\}$</li>
+                        <li><strong>Intervallo chiuso a sinistra e aperto a destra:</strong> $[a; b[$</li>
+                        <li><strong>Intervallo aperto a sinistra e chiuso a destra:</strong> $]a; b]$</li>
+                    </ul>
+
+                    <div class="definizione">
+                        <h4>Caratteristiche degli intervalli limitati</h4>
+                        <p><strong>Ampiezza:</strong> $b - a$</p>
+                        <p><strong>Centro:</strong> $\frac{a+b}{2}$</p>
+                        <p><strong>Raggio:</strong> $\frac{b-a}{2}$</p>
+                    </div>
+
+                    <h4>Intervalli Illimitati:</h4>
+                    <ul>
+                        <li>$[a; +\infty[$ : $x \geq a$</li>
+                        <li>$]a; +\infty[$ : $x > a$</li>
+                        <li>$]-\infty; a]$ : $x \leq a$</li>
+                        <li>$]-\infty; a[$ : $x < a$</li>
+                    </ul>
+
+                    <div class="attenzione">
+                        <h4>⚠️ Nota Importante</h4>
+                        <p>I simboli $+\infty$ e $-\infty$ <strong>non sono numeri reali</strong> e quindi sono sempre esclusi dall'intervallo.</p>
+                    </div>
+
+                    <h3>Intorno Circolare</h3>
+                    <div class="definizione">
+                        <h4>Definizione di Intorno</h4>
+                        <p>Dati un numero reale $x_0$ e un numero reale positivo $\delta$, un <strong>intorno circolare</strong> di $x_0$, di raggio $\delta$, è l'intervallo aperto:</p>
+                        <div class="formula">
+                            $I_\delta(x_0) = ]x_0 - \delta; x_0 + \delta[$
+                        </div>
+                        <p>Equivalentemente: $I_\delta(x_0) = \{x \in \mathbb{R} : |x - x_0| < \delta\}$</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio</h4>
+                        <p>L'intorno circolare di 5 di raggio 2 è $]5-2; 5+2[ = ]3; 7[$</p>
+                    </div>
+
+                    <h3>Intorno Destro e Sinistro</h3>
+                    <ul>
+                        <li><strong>Intorno sinistro</strong> di $x_0$: $I_\delta^-(x_0) = ]x_0 - \delta; x_0[$</li>
+                        <li><strong>Intorno destro</strong> di $x_0$: $I_\delta^+(x_0) = ]x_0; x_0 + \delta[$</li>
+                    </ul>
+
+                    <h3>Intorni di Infinito</h3>
+                    <ul>
+                        <li><strong>Intorno di $+\infty$:</strong> $]a; +\infty[$ con $a \in \mathbb{R}$</li>
+                        <li><strong>Intorno di $-\infty$:</strong> $]-\infty; a[$ con $a \in \mathbb{R}$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Punti di accumulazione -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>2. Punti di Accumulazione</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>Il numero reale $x_0$ è un <strong>punto di accumulazione</strong> di $A \subseteq \mathbb{R}$ se ogni intorno completo di $x_0$ contiene infiniti punti di $A$.</p>
+                    </div>
+
+                    <p><strong>Proprietà importante:</strong> La definizione equivale a dire che $x_0$ è punto di accumulazione di $A$ se ogni intorno di $x_0$ contiene almeno un elemento di $A$ distinto da $x_0$.</p>
+
+                    <div class="esempio">
+                        <h4>Esempio</h4>
+                        <p>Sia $A = \{x \in \mathbb{R} : 2 \leq x < 5\} \cup \{6\}$</p>
+                        <ul>
+                            <li>I punti 2, 4, 5 sono punti di accumulazione di $A$</li>
+                            <li>Il punto 6 <strong>non è</strong> punto di accumulazione (esiste un intorno di 6 contenente solo il punto 6)</li>
+                        </ul>
+                    </div>
+
+                    <div class="attenzione">
+                        <h4>⚠️ Osservazione</h4>
+                        <p>Un punto di accumulazione può appartenere o non appartenere all'insieme. Nell'esempio, 5 è punto di accumulazione ma non appartiene ad $A$.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limite finito per x che tende a x0 -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>3. Limite Finito: $\lim_{x \to x_0} f(x) = \ell$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>La funzione $f(x)$, definita nel dominio $D$, ha per limite il numero reale $\ell$, per $x$ che tende a $x_0$ (punto di accumulazione di $D$), quando:</p>
+                        <div class="formula">
+                            $\forall \varepsilon > 0 \ \exists I(x_0) : |f(x) - \ell| < \varepsilon, \ \forall x \in I(x_0), x \neq x_0$
+                        </div>
+                        <p style="text-align: center; margin-top: 15px;">Si scrive: $\displaystyle \lim_{x \to x_0} f(x) = \ell$</p>
+                    </div>
+
+                    <h4>Interpretazione:</h4>
+                    <p>Per ogni $\varepsilon > 0$ (piccolo a piacere), esiste un intorno $I(x_0)$ tale che i valori di $f(x)$ distano da $\ell$ meno di $\varepsilon$, cioè:</p>
+                    <div class="formula">
+                        $\ell - \varepsilon < f(x) < \ell + \varepsilon$
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio Fondamentale</h4>
+                        <p>Consideriamo $f(x) = \frac{2x^2 - 6x}{x - 3}$ con $x \neq 3$</p>
+                        <p>Semplificando: $f(x) = \frac{2x(x-3)}{x-3} = 2x$ per $x \neq 3$</p>
+                        <p>Osservando i valori vicini a 3:</p>
+                        <p style="text-align: center;">$\lim_{x \to 3} f(x) = 6$</p>
+                        <p><strong>Nota:</strong> $f(3)$ non esiste, ma il limite esiste!</p>
+                    </div>
+
+                    <div class="attenzione">
+                        <h4>⚠️ Importante</h4>
+                        <ul>
+                            <li>Il limite può esistere anche se la funzione non è definita in $x_0$</li>
+                            <li>Il valore del limite può essere diverso da $f(x_0)$</li>
+                            <li>$x_0$ deve essere punto di accumulazione del dominio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Funzioni Continue -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>4. Funzioni Continue</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="definizione">
+                        <h4>Definizione di Continuità</h4>
+                        <p>Una funzione $f(x)$ è <strong>continua</strong> nel punto $x_0$ quando esiste il limite di $f(x)$ per $x \to x_0$ e tale limite è uguale al valore della funzione in $x_0$:</p>
+                        <div class="formula">
+                            $\lim_{x \to x_0} f(x) = f(x_0)$
+                        </div>
+                    </div>
+
+                    <h3>Funzioni Continue Elementari:</h3>
+                    
+                    <ul>
+                        <li><strong>Funzione costante:</strong> $f(x) = k$ è continua in $\mathbb{R}$</li>
+                        <li><strong>Funzioni polinomiali:</strong> $f(x) = a_0x^n + a_1x^{n-1} + \ldots + a_n$ sono continue in $\mathbb{R}$</li>
+                        <li><strong>Funzione radice:</strong> $f(x) = \sqrt{x}$ è continua in $\mathbb{R}^+ \cup \{0\}$</li>
+                        <li><strong>Funzioni goniometriche:</strong> $\sin x$ e $\cos x$ sono continue in $\mathbb{R}$</li>
+                        <li><strong>Funzione esponenziale:</strong> $f(x) = a^x$ $(a > 0)$ è continua in $\mathbb{R}$</li>
+                        <li><strong>Funzione logaritmica:</strong> $f(x) = \log_a x$ $(a > 0, a \neq 1)$ è continua in $\mathbb{R}^+$</li>
+                    </ul>
+
+                    <div class="esempio">
+                        <h4>Vantaggi delle funzioni continue</h4>
+                        <p>Se $f(x)$ è continua in $x_0$, calcolare il limite è semplicissimo:</p>
+                        <div class="formula">
+                            $\lim_{x \to x_0} f(x) = f(x_0)$
+                        </div>
+                        <p>Basta sostituire il valore!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limiti destro e sinistro -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>5. Limiti Destro e Sinistro</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Limite Destro</h3>
+                    <div class="definizione">
+                        <p>$\lim_{x \to x_0^+} f(x) = \ell$ significa che $x$ si avvicina a $x_0$ da destra (restando sempre $> x_0$)</p>
+                        <p>La condizione $|f(x) - \ell| < \varepsilon$ deve valere per ogni $x$ in un intorno destro $I^+(x_0) = ]x_0; x_0 + \delta[$</p>
+                    </div>
+
+                    <h3>Limite Sinistro</h3>
+                    <div class="definizione">
+                        <p>$\lim_{x \to x_0^-} f(x) = \ell$ significa che $x$ si avvicina a $x_0$ da sinistra (restando sempre $< x_0$)</p>
+                        <p>La condizione $|f(x) - \ell| < \varepsilon$ deve valere per ogni $x$ in un intorno sinistro $I^-(x_0) = ]x_0 - \delta; x_0[$</p>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema Fondamentale</h4>
+                        <p>Il limite esiste se e solo se i limiti destro e sinistro esistono e coincidono:</p>
+                        <div class="formula">
+                            $\lim_{x \to x_0} f(x) = \ell \iff \lim_{x \to x_0^+} f(x) = \lim_{x \to x_0^-} f(x) = \ell$
+                        </div>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio</h4>
+                        <p>Per la funzione $y = \frac{1}{x}$ in $x = 0$:</p>
+                        <ul>
+                            <li>$\lim_{x \to 0^+} \frac{1}{x} = +\infty$</li>
+                            <li>$\lim_{x \to 0^-} \frac{1}{x} = -\infty$</li>
+                        </ul>
+                        <p><strong>Conclusione:</strong> $\lim_{x \to 0} \frac{1}{x}$ <strong>non esiste</strong> (limiti destro e sinistro diversi)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limite infinito -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>6. Limiti Infiniti: $\lim_{x \to x_0} f(x) = \pm\infty$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Limite $+\infty$</h3>
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>$\lim_{x \to x_0} f(x) = +\infty$ quando per ogni $M > 0$ (grande a piacere) esiste un intorno $I(x_0)$ tale che:</p>
+                        <div class="formula">
+                            $f(x) > M, \ \forall x \in I(x_0), x \neq x_0$
+                        </div>
+                        <p>Si dice che la funzione <strong>diverge positivamente</strong>.</p>
+                    </div>
+
+                    <h3>Limite $-\infty$</h3>
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>$\lim_{x \to x_0} f(x) = -\infty$ quando per ogni $M > 0$ esiste un intorno $I(x_0)$ tale che:</p>
+                        <div class="formula">
+                            $f(x) < -M, \ \forall x \in I(x_0), x \neq x_0$
+                        </div>
+                        <p>Si dice che la funzione <strong>diverge negativamente</strong>.</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio Classico</h4>
+                        <p>$f(x) = \frac{1}{(x-1)^2}$</p>
+                        <p>Quando $x \to 1$, i valori di $f(x)$ crescono sempre più:</p>
+                        <div class="formula">
+                            $\lim_{x \to 1} \frac{1}{(x-1)^2} = +\infty$
+                        </div>
+                    </div>
+
+                    <h3>Limiti Destro e Sinistro Infiniti</h3>
+                    <table>
+                        <tr>
+                            <th>Limite</th>
+                            <th>Condizione</th>
+                            <th>Intorno</th>
+                        </tr>
+                        <tr>
+                            <td>$\lim_{x \to x_0^+} f(x) = +\infty$</td>
+                            <td>$f(x) > M$</td>
+                            <td>destro di $x_0$</td>
+                        </tr>
+                        <tr>
+                            <td>$\lim_{x \to x_0^-} f(x) = +\infty$</td>
+                            <td>$f(x) > M$</td>
+                            <td>sinistro di $x_0$</td>
+                        </tr>
+                        <tr>
+                            <td>$\lim_{x \to x_0^+} f(x) = -\infty$</td>
+                            <td>$f(x) < -M$</td>
+                            <td>destro di $x_0$</td>
+                        </tr>
+                        <tr>
+                            <td>$\lim_{x \to x_0^-} f(x) = -\infty$</td>
+                            <td>$f(x) < -M$</td>
+                            <td>sinistro di $x_0$</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Limiti all'infinito -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>7. Limiti per $x \to \pm\infty$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Limite finito per $x \to +\infty$</h3>
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>$\lim_{x \to +\infty} f(x) = \ell$ quando per ogni $\varepsilon > 0$ esiste un intorno $I(+\infty) = ]c; +\infty[$ tale che:</p>
+                        <div class="formula">
+                            $|f(x) - \ell| < \varepsilon, \ \forall x > c$
+                        </div>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio</h4>
+                        <p>$\lim_{x \to +\infty} \frac{3x+2}{x} = \lim_{x \to +\infty} \left(3 + \frac{2}{x}\right) = 3$</p>
+                        <p>La retta $y = 3$ è un <strong>asintoto orizzontale</strong>.</p>
+                    </div>
+
+                    <h3>Limiti infiniti per $x \to \pm\infty$</h3>
+                    
+                    <div class="definizione">
+                        <p><strong>$\lim_{x \to +\infty} f(x) = +\infty$:</strong> Per ogni $M > 0$ esiste $c$ tale che $f(x) > M$ per ogni $x > c$</p>
+                        <p><strong>$\lim_{x \to +\infty} f(x) = -\infty$:</strong> Per ogni $M > 0$ esiste $c$ tale che $f(x) < -M$ per ogni $x > c$</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempi con funzioni elementari</h4>
+                        <ul>
+                            <li>$\lim_{x \to +\infty} x^3 = +\infty$</li>
+                            <li>$\lim_{x \to -\infty} x^3 = -\infty$</li>
+                            <li>$\lim_{x \to +\infty} x^2 = +\infty$</li>
+                            <li>$\lim_{x \to -\infty} x^2 = +\infty$</li>
+                            <li>$\lim_{x \to +\infty} e^x = +\infty$</li>
+                            <li>$\lim_{x \to -\infty} e^x = 0$</li>
+                            <li>$\lim_{x \to +\infty} \ln x = +\infty$</li>
+                            <li>$\lim_{x \to 0^+} \ln x = -\infty$</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NUOVA SEZIONE: Gerarchia degli Infiniti -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>8. ⚡ Gerarchia degli Infiniti e Confronto tra Funzioni</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Concetto di Gerarchia degli Infiniti</h3>
+                    <p>Quando $x \to +\infty$, diverse funzioni tendono a infinito con "velocità" diverse. Alcune crescono molto più rapidamente di altre.</p>
+
+                    <div class="gerarchia-box">
+                        <h4>📊 Scala degli Infiniti (dal più lento al più veloce)</h4>
+                        <p>Per $x \to +\infty$, la velocità di crescita segue questo ordine:</p>
+                        <div class="formula">
+                            $\ln x \ll x^\alpha \ll e^x \ll x! \ll x^x$
+                        </div>
+                        <p style="text-align: center; margin-top: 10px;"><em>Il simbolo $\ll$ significa "cresce molto più lentamente di"</em></p>
+                    </div>
+
+                    <h3>Gerarchia Dettagliata</h3>
+                    
+                    <div class="gerarchia-box">
+                        <h4>Ordine crescente di velocità:</h4>
+                        <ol style="line-height: 2.2;">
+                            <li><strong>Logaritmi:</strong> $\ln x$, $\ln(\ln x)$, $\log_a x$ — crescono lentissimamente</li>
+                            <li><strong>Potenze con esponente frazionario:</strong> $\sqrt{x} = x^{1/2}$, $\sqrt[3]{x}$, $x^{0.7}$</li>
+                            <li><strong>Potenza lineare:</strong> $x = x^1$</li>
+                            <li><strong>Potenze superiori:</strong> $x^2$, $x^3$, $x^n$ con $n > 1$</li>
+                            <li><strong>Esponenziali:</strong> $e^x$, $2^x$, $a^x$ con $a > 1$ — crescono velocissimamente</li>
+                            <li><strong>Fattoriale:</strong> $x!$ (ancora più veloce)</li>
+                            <li><strong>Potenza con base variabile:</strong> $x^x$ — il più veloce in assoluto</li>
+                        </ol>
+                    </div>
+
+                    <h3>Confronti Fondamentali</h3>
+
+                    <div class="teorema">
+                        <h4>Teorema: Logaritmo vs Potenza</h4>
+                        <p>Per ogni $\alpha > 0$, per quanto piccolo:</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{\ln x}{x^\alpha} = 0$
+                        </div>
+                        <p><strong>Significato:</strong> Qualsiasi potenza (anche $x^{0.001}$) cresce più velocemente del logaritmo.</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio pratico</h4>
+                        <p>$$\lim_{x \to +\infty} \frac{\ln x}{x} = 0$$</p>
+                        <p>$$\lim_{x \to +\infty} \frac{\ln x}{\sqrt{x}} = 0$$</p>
+                        <p>Il logaritmo viene "schiacciato" dalla potenza.</p>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema: Potenza vs Esponenziale</h4>
+                        <p>Per ogni $n \in \mathbb{N}$ (per quanto grande):</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{x^n}{e^x} = 0$
+                        </div>
+                        <p><strong>Significato:</strong> L'esponenziale cresce più velocemente di qualsiasi potenza, anche $x^{1000000}$!</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempi</h4>
+                        <p>$$\lim_{x \to +\infty} \frac{x^{100}}{e^x} = 0$$</p>
+                        <p>$$\lim_{x \to +\infty} \frac{x^3}{2^x} = 0$$</p>
+                        <p>L'esponenziale "vince" sempre sulla potenza!</p>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema: Logaritmo vs Esponenziale</h4>
+                        <p>Combinando i risultati precedenti:</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{\ln x}{e^x} = 0$
+                        </div>
+                    </div>
+
+                    <h3>Tabella Riassuntiva dei Confronti</h3>
+                    <table>
+                        <tr>
+                            <th>Limite per $x \to +\infty$</th>
+                            <th>Risultato</th>
+                            <th>Interpretazione</th>
+                        </tr>
+                        <tr>
+                            <td>$\frac{\ln x}{x^\alpha}$ con $\alpha > 0$</td>
+                            <td>$0$</td>
+                            <td>Potenza > Logaritmo</td>
+                        </tr>
+                        <tr>
+                            <td>$\frac{x^\alpha}{x^\beta}$ con $\alpha < \beta$</td>
+                            <td>$0$</td>
+                            <td>Potenza maggiore vince</td>
+                        </tr>
+                        <tr>
+                            <td>$\frac{x^n}{e^x}$ con $n \in \mathbb{N}$</td>
+                            <td>$0$</td>
+                            <td>Esponenziale > Potenza</td>
+                        </tr>
+                        <tr>
+                            <td>$\frac{\ln x}{e^x}$</td>
+                            <td>$0$</td>
+                            <td>Esponenziale > Logaritmo</td>
+                        </tr>
+                        <tr>
+                            <td>$\frac{e^x}{x^x}$</td>
+                            <td>$0$</td>
+                            <td>$x^x$ > Esponenziale</td>
+                        </tr>
+                    </table>
+
+                    <h3>Applicazioni della Gerarchia</h3>
+
+                    <div class="esempio">
+                        <h4>Esempio 1: Semplificazione immediata</h4>
+                        <p><strong>Problema:</strong> $\lim_{x \to +\infty} \frac{x^3 - 2x + \ln x}{x^3 + e^x}$</p>
+                        <p><strong>Soluzione:</strong> Al numeratore domina $x^3$, al denominatore domina $e^x$ (che cresce più velocemente di $x^3$).</p>
+                        <p>Quindi il limite è equivalente a:</p>
+                        <p>$$\lim_{x \to +\infty} \frac{x^3}{e^x} = 0$$</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio 2: Somma di infiniti</h4>
+                        <p><strong>Problema:</strong> $\lim_{x \to +\infty} (x^2 + e^x + \ln x)$</p>
+                        <p><strong>Soluzione:</strong> L'esponenziale cresce più velocemente, quindi:</p>
+                        <p>$$\lim_{x \to +\infty} (x^2 + e^x + \ln x) = +\infty$$</p>
+                        <p>E il comportamento è dominato da $e^x$.</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio 3: Differenza di infiniti</h4>
+                        <p><strong>Problema:</strong> $\lim_{x \to +\infty} (e^x - x^{100})$</p>
+                        <p><strong>Soluzione:</strong> Anche se $x^{100}$ è una potenza altissima, $e^x$ cresce più velocemente:</p>
+                        <p>$$\lim_{x \to +\infty} (e^x - x^{100}) = \lim_{x \to +\infty} e^x\left(1 - \frac{x^{100}}{e^x}\right) = +\infty \cdot 1 = +\infty$$</p>
+                    </div>
+
+                    <h3>Scala Visiva degli Infiniti</h3>
+                    <div class="gerarchia-box">
+                        <h4>🐌 ➡️ 🐇 ➡️ 🚀 ➡️ ⚡</h4>
+                        <table>
+                            <tr>
+                                <th>Velocità</th>
+                                <th>Funzione</th>
+                                <th>Esempio per $x = 10$</th>
+                            </tr>
+                            <tr>
+                                <td>🐌 Lentissima</td>
+                                <td>$\ln x$</td>
+                                <td>$\ln 10 \approx 2.3$</td>
+                            </tr>
+                            <tr>
+                                <td>🚶 Lenta</td>
+                                <td>$\sqrt{x}$</td>
+                                <td>$\sqrt{10} \approx 3.16$</td>
+                            </tr>
+                            <tr>
+                                <td>🚴 Moderata</td>
+                                <td>$x$</td>
+                                <td>$10$</td>
+                            </tr>
+                            <tr>
+                                <td>🏃 Veloce</td>
+                                <td>$x^2$</td>
+                                <td>$100$</td>
+                            </tr>
+                            <tr>
+                                <td>🚗 Molto veloce</td>
+                                <td>$x^3$</td>
+                                <td>$1000$</td>
+                            </tr>
+                            <tr>
+                                <td>🚀 Velocissima</td>
+                                <td>$e^x$</td>
+                                <td>$e^{10} \approx 22026$</td>
+                            </tr>
+                            <tr>
+                                <td>⚡ Ultraveloce</td>
+                                <td>$x^x$</td>
+                                <td>$10^{10} = 10000000000$</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3>Regole Pratiche</h3>
+
+                    <div class="gerarchia-box">
+                        <h4>💡 Come usare la gerarchia</h4>
+                        <p><strong>Regola 1:</strong> In una somma di infiniti, domina quello che cresce più velocemente.</p>
+                        <p>$$\lim_{x \to +\infty} (x^2 + x^5 + \ln x) = \lim_{x \to +\infty} x^5 = +\infty$$</p>
+
+                        <p><strong>Regola 2:</strong> In un rapporto $\frac{f(x)}{g(x)}$:</p>
+                        <ul>
+                            <li>Se $f$ cresce più velocemente di $g$ → limite = $+\infty$</li>
+                            <li>Se $g$ cresce più velocemente di $f$ → limite = $0$</li>
+                            <li>Se crescono alla stessa velocità → limite = rapporto dei coefficienti</li>
+                        </ul>
+
+                        <p><strong>Regola 3:</strong> In una differenza, la gerarchia aiuta ma attenzione!</p>
+                        <p>$$\lim_{x \to +\infty} (e^x - x^3) = +\infty \text{ (domina } e^x)$$</p>
+                        <p>Ma: $\lim_{x \to +\infty} (x^2 - x^2) = ?$ Serve calcolare!</p>
+                    </div>
+
+                    <h3>Ordine di Infinito</h3>
+
+                    <div class="definizione">
+                        <h4>Definizione</h4>
+                        <p>Si dice che $f(x)$ è un <strong>infinito di ordine superiore</strong> rispetto a $g(x)$ per $x \to +\infty$ se:</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{f(x)}{g(x)} = +\infty$
+                        </div>
+                        <p>Si dice che sono <strong>infiniti dello stesso ordine</strong> se:</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{f(x)}{g(x)} = k \neq 0$ (costante finita)
+                        </div>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempi di ordini</h4>
+                        <ul>
+                            <li>$x^3$ è di ordine superiore a $x^2$: $\lim_{x \to +\infty} \frac{x^3}{x^2} = \lim_{x \to +\infty} x = +\infty$</li>
+                            <li>$3x^2$ e $5x^2$ sono dello stesso ordine: $\lim_{x \to +\infty} \frac{3x^2}{5x^2} = \frac{3}{5}$</li>
+                            <li>$e^x$ è di ordine superiore a $x^n$ per ogni $n$</li>
+                        </ul>
+                    </div>
+
+                    <h3>Confronto tra Logaritmi, Potenze ed Esponenziali</h3>
+
+                    <div class="gerarchia-box">
+                        <h4>🔬 Risultati Fondamentali</h4>
+                        
+                        <p><strong>1. Logaritmo è trascurabile rispetto a qualsiasi potenza:</strong></p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{\ln x}{x^\alpha} = 0, \ \forall \alpha > 0$
+                        </div>
+
+                        <p><strong>2. Potenza è trascurabile rispetto all'esponenziale:</strong></p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{x^n}{e^x} = 0, \ \forall n \in \mathbb{N}$
+                        </div>
+
+                        <p><strong>3. Esponenziale "vince" su prodotti logaritmo × potenza:</strong></p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{x^n \ln x}{e^x} = 0$
+                        </div>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio Applicativo 1</h4>
+                        <p><strong>Calcolare:</strong> $\lim_{x \to +\infty} \frac{x^3 + 5x^2 \ln x - 3e^x}{2e^x - x^4}$</p>
+                        <p><strong>Soluzione usando la gerarchia:</strong></p>
+                        <p>Al numeratore: $e^x$ domina (ordine superiore)</p>
+                        <p>Al denominatore: $e^x$ domina su $x^4$</p>
+                        <p>$$\lim_{x \to +\infty} \frac{-3e^x}{2e^x} = \frac{-3}{2}$$</p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio Applicativo 2</h4>
+                        <p><strong>Calcolare:</strong> $\lim_{x \to +\infty} (x^2 - x^2 e^{-x})$</p>
+                        <p><strong>Analisi:</strong></p>
+                        <p>$$x^2 - x^2 e^{-x} = x^2(1 - e^{-x})$$</p>
+                        <p>Per $x \to +\infty$: $e^{-x} = \frac{1}{e^x} \to 0$</p>
+                        <p>$$\lim_{x \to +\infty} x^2(1 - 0) = +\infty$$</p>
+                    </div>
+
+                    <h3>Gerarchia per $x \to 0^+$</h3>
+
+                    <div class="gerarchia-box">
+                        <h4>⚠️ Attenzione: Per $x \to 0^+$ l'ordine si INVERTE!</h4>
+                        <p>Per $x \to 0^+$, gli "infinitesimi" (funzioni che tendono a 0) hanno questa gerarchia:</p>
+                        <div class="formula">
+                            $e^{-1/x} \ll x^n \ll x \ll \sqrt{x} \ll \ln x$
+                        </div>
+                        <p style="margin-top: 10px;"><em>Qui $\ll$ significa "tende a zero più velocemente di"</em></p>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempi per $x \to 0^+$</h4>
+                        <ul>
+                            <li>$\lim_{x \to 0^+} \frac{x^2}{x} = \lim_{x \to 0^+} x = 0$ ($x^2$ tende a 0 più velocemente di $x$)</li>
+                            <li>$\lim_{x \to 0^+} \frac{x}{\ln x} = 0$ (perché $\ln x \to -\infty$ più "lentamente")</li>
+                            <li>$\lim_{x \to 0^+} \frac{\sqrt{x}}{x} = \lim_{x \to 0^+} \frac{1}{\sqrt{x}} = +\infty$</li>
+                        </ul>
+                    </div>
+
+                    <h3>Applicazioni Pratiche della Gerarchia</h3>
+
+                    <div class="pratica">
+                        <h4>🎯 Strategia Risolutiva</h4>
+                        <p><strong>Quando hai un limite complicato per $x \to \pm\infty$:</strong></p>
+                        <ol>
+                            <li>Identifica le funzioni presenti (logaritmi, potenze, esponenziali)</li>
+                            <li>Individua quella di ordine superiore in ogni termine</li>
+                            <li>Semplifica trascurando i termini di ordine inferiore</li>
+                            <li>Calcola il limite semplificato</li>
+                        </ol>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Esempio di Strategia</h4>
+                        <p>$$\lim_{x \to +\infty} \frac{2e^x + x^5 + \ln x}{3e^x - x^3 + 100}$$</p>
+                        <p><strong>Passo 1:</strong> Identifico $e^x$ come funzione dominante</p>
+                        <p><strong>Passo 2:</strong> Numeratore $\approx 2e^x$, Denominatore $\approx 3e^x$</p>
+                        <p><strong>Passo 3:</strong> $$\lim_{x \to +\infty} \frac{2e^x}{3e^x} = \frac{2}{3}$$</p>
+                    </div>
+
+                    <div class="attenzione">
+                        <h4>⚠️ ATTENZIONE: Quando NON usare la gerarchia</h4>
+                        <p>La gerarchia NON aiuta nelle forme indeterminate dove le funzioni sono dello STESSO ordine!</p>
+                        <p><strong>Esempio:</strong> $\lim_{x \to +\infty} \frac{3x^2 + 5x}{2x^2 - x}$</p>
+                        <p>Entrambi sono $x^2$ → stesso ordine → serve il calcolo completo → risultato = $\frac{3}{2}$</p>
+                    </div>
+
+                    <h3>Tabella Completa degli Ordini di Infinito</h3>
+
+                    <table>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Funzioni (ordine crescente)</th>
+                            <th>Velocità di crescita</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Logaritmiche</strong></td>
+                            <td>$\ln(\ln x) < \ln x < (\ln x)^2 < (\ln x)^n$</td>
+                            <td>Molto lenta</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Potenze frazionarie</strong></td>
+                            <td>$x^{1/n} < \ldots < \sqrt{x} < x^{2/3}$</td>
+                            <td>Lenta</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Potenze intere</strong></td>
+                            <td>$x < x^2 < x^3 < \ldots < x^n$</td>
+                            <td>Moderata/Veloce</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Esponenziali</strong></td>
+                            <td>$2^x < 3^x < e^x < 10^x < e^{2x}$</td>
+                            <td>Velocissima</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Super-esponenziali</strong></td>
+                            <td>$x! < x^x < e^{e^x}$</td>
+                            <td>Estremamente veloce</td>
+                        </tr>
+                    </table>
+
+                    <div class="error-box">
+                        <h4>❌ Errore Frequente</h4>
+                        <p><strong>SBAGLIATO:</strong> Pensare che $x^{1000} > e^x$ per $x$ grande</p>
+                        <p><strong>CORRETTO:</strong> No! Per $x$ abbastanza grande, $e^x$ supera SEMPRE qualsiasi potenza:</p>
+                        <p>Ad esempio, per $x = 100$:</p>
+                        <ul>
+                            <li>$x^{1000} = 100^{1000} = 10^{2000}$ (numero enorme)</li>
+                            <li>$e^{100} \approx 2.7 \times 10^{43}$ (molto più piccolo)</li>
+                        </ul>
+                        <p>Ma per $x = 1000$: $e^{1000}$ diventa incomparabilmente più grande di $1000^{1000}$!</p>
+                        <p>L'esponenziale cresce così velocemente che <strong>alla fine supera sempre</strong> qualsiasi potenza.</p>
+                    </div>
+
+                    <div class="pratica">
+                        <h4>🔧 Applicazione Ingegneristica</h4>
+                        <p><strong>Problema:</strong> Un componente meccanico si deteriora secondo due modelli:</p>
+                        <ul>
+                            <li>Modello A: Usura $= 0.1t^2$ (legge potenza)</li>
+                            <li>Modello B: Usura $= 0.001 \cdot e^{0.5t}$ (legge esponenziale)</li>
+                        </ul>
+                        <p>Quale modello prevede un deterioramento più grave a lungo termine?</p>
+                        <p><strong>Soluzione:</strong> Per $t$ grande, l'esponenziale domina:</p>
+                        <p>$$\lim_{t \to +\infty} \frac{0.001 \cdot e^{0.5t}}{0.1t^2} = +\infty$$</p>
+                        <p><strong>Conclusione:</strong> Il Modello B (esponenziale) prevede un deterioramento molto più rapido!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teoremi sui limiti -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>9. Teoremi sui Limiti</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="teorema">
+                        <h4>Teorema di Unicità del Limite</h4>
+                        <p>Se $f(x)$ ha limite finito $\ell$ per $x \to x_0$, allora tale limite è <strong>unico</strong>.</p>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema della Permanenza del Segno</h4>
+                        <p>Se $\lim_{x \to x_0} f(x) = \ell$ con $\ell \neq 0$, allora esiste un intorno $I(x_0)$ in cui $f(x)$ e $\ell$ hanno lo stesso segno.</p>
+                        <ul>
+                            <li>Se $\ell > 0$, allora $f(x) > 0$ in un intorno di $x_0$</li>
+                            <li>Se $\ell < 0$, allora $f(x) < 0$ in un intorno di $x_0$</li>
+                        </ul>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema del Confronto (o dei Due Carabinieri)</h4>
+                        <p>Siano $h(x) \leq f(x) \leq g(x)$ in un intorno di $x_0$ (escluso al più $x_0$).</p>
+                        <p>Se $\lim_{x \to x_0} h(x) = \lim_{x \to x_0} g(x) = \ell$, allora anche:</p>
+                        <div class="formula">
+                            $\lim_{x \to x_0} f(x) = \ell$
+                        </div>
+                    </div>
+
+                    <div class="esempio">
+                        <h4>Applicazione del Teorema del Confronto</h4>
+                        <p>Calcolare $\lim_{x \to +\infty} \frac{\sin x}{x}$</p>
+                        <p>Poiché $-1 \leq \sin x \leq 1$, per $x > 0$:</p>
+                        <div class="formula">
+                            $-\frac{1}{x} \leq \frac{\sin x}{x} \leq \frac{1}{x}$
+                        </div>
+                        <p>Siccome $\lim_{x \to +\infty} \frac{1}{x} = \lim_{x \to +\infty} \left(-\frac{1}{x}\right) = 0$, per il teorema del confronto:</p>
+                        <div class="formula">
+                            $\lim_{x \to +\infty} \frac{\sin x}{x} = 0$
+                        </div>
+                    </div>
+
+                    <div class="teorema">
+                        <h4>Teorema (inverso della permanenza del segno)</h4>
+                        <p>Se $\lim_{x \to x_0} f(x) = \ell$ e in un intorno di $x_0$ (escluso al più $x_0$):</p>
+                        <ul>
+                            <li>$f(x) \geq 0$ allora $\ell \geq 0$</li>
+                            <li>$f(x) \leq 0$ allora $\ell \leq 0$</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operazioni con i limiti -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>10. Algebra dei Limiti</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <p>Se $\lim_{x \to x_0} f(x) = \ell_1$ e $\lim_{x \to x_0} g(x) = \ell_2$, allora:</p>
+
+                    <h3>Somma e Differenza:</h3>
+                    <div class="formula">
+                        $\lim_{x \to x_0} [f(x) \pm g(x)] = \ell_1 \pm \ell_2$
+                    </div>
+
+                    <h3>Prodotto:</h3>
+                    <div class="formula">
+                        $\lim_{x \to x_0} [f(x) \cdot g(x)] = \ell_1 \cdot \ell_2$
+                    </div>
+
+                    <h3>Quoziente:</h3>
+                    <div class="formula">
+                        $\lim_{x \to x_0} \frac{f(x)}{g(x)} = \frac{\ell_1}{\ell_2}$ se $\ell_2 \neq 0$
+                    </div>
+
+                    <h3>Potenza:</h3>
+                    <div class="formula">
+                        $\lim_{x \to x_0} [f(x)]^n = \ell_1^n$
+                    </div>
+
+                    <div class="attenzione">
+                        <h4>⚠️ Forme Indeterminate</h4>
+                        <p>Le operazioni sopra <strong>non valgono</strong> nei seguenti casi (forme indeterminate):</p>
+                        <ul>
+                            <li>$+\infty - \infty$</li>
+                            <li>$0 \cdot (\pm\infty)$</li>
+                            <li>$\frac{0}{0}$</li>
+                            <li>$\frac{\pm\infty}{\pm\infty}$</li>
+                            <li>$1^\infty$, $0^0$, $\infty^0$</li>
+                        </ul>
+                        <p>Queste forme richiedono tecniche specifiche di risoluzione!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limiti notevoli -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>11. Limiti Notevoli</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <h3>Limiti Goniometrici:</h3>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{\sin x}{x} = 1$
+                    </div>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{1 - \cos x}{x^2} = \frac{1}{2}$
+                    </div>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{\tan x}{x} = 1$
+                    </div>
+
+                    <h3>Limiti Esponenziali:</h3>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{e^x - 1}{x} = 1$
+                    </div>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{a^x - 1}{x} = \ln a$ (con $a > 0$)
+                    </div>
+
+                    <h3>Limiti Logaritmici:</h3>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{\ln(1+x)}{x} = 1$
+                    </div>
+                    <div class="formula">
+                        $\lim_{x \to 0} \frac{\log_a(1+x)}{x} = \frac{1}{\ln a}$
+                    </div>
+
+                    <h3>Numero di Nepero:</h3>
+                    <div class="formula">
+                        $\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e$
+                    </div>
+                    <div class="formula">
+                        $\lim_{x \to 0} (1 + x)^{\frac{1}{x}} = e$
+                    </div>
+
+                    <div class="attenzione">
+                        <h4>⚠️ Come usare i limiti notevoli</h4>
+                        <p>Spesso è necessario manipolare l'espressione per ricondursi alla forma standard del limite notevole attraverso sostituzioni opportune.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB ESERCIZI BASE -->
+        <div id="esercizi-base" class="tab-content">
+            <h2>Esercizi di Base</h2>
+            <p style="margin-bottom: 20px;">Clicca su ogni esercizio per vedere la soluzione dettagliata.</p>
+
+            <!-- Esercizio 1 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 1</span> $\lim_{x \to 1} (x - 1)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 0</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Riconoscere il tipo di limite</div>
+                            <p>Si tratta di una funzione polinomiale (continua in $\mathbb{R}$), quindi possiamo calcolare il limite per sostituzione diretta.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Sostituzione</div>
+                            <p>$$\lim_{x \to 1} (x - 1) = 1 - 1 = 0$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Conclusione</div>
+                            <p>Il limite vale <strong>0</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 2 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 2</span> $\lim_{x \to 2} (2x + 5)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 9</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Identificazione</div>
+                            <p>Funzione polinomiale di primo grado (retta), continua in $\mathbb{R}$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Calcolo</div>
+                            <p>$$\lim_{x \to 2} (2x + 5) = 2 \cdot 2 + 5 = 4 + 5 = 9$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 3 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 3</span> $\lim_{x \to 3} (x^2 - 2)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 7</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Verifica della continuità</div>
+                            <p>$f(x) = x^2 - 2$ è una funzione polinomiale, quindi continua.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Sostituzione diretta</div>
+                            <p>$$\lim_{x \to 3} (x^2 - 2) = 3^2 - 2 = 9 - 2 = 7$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 4 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 4</span> $\lim_{x \to 2} \frac{1}{x}$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $\frac{1}{2}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Verifica del dominio</div>
+                            <p>$f(x) = \frac{1}{x}$ è definita per $x \neq 0$. Il punto $x = 2$ appartiene al dominio.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Continuità</div>
+                            <p>La funzione è continua in $x = 2$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo</div>
+                            <p>$$\lim_{x \to 2} \frac{1}{x} = \frac{1}{2}$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 5 - Forma indeterminata 0/0 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 5</span> $\lim_{x \to 1} \frac{x^2 - 1}{x - 1}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 2</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Verifica della forma</div>
+                            <p>Per $x = 1$: numeratore = $1 - 1 = 0$, denominatore = $1 - 1 = 0$</p>
+                            <p><strong>Forma indeterminata $\frac{0}{0}$</strong></p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Scomposizione</div>
+                            <p>Scomponiamo il numeratore usando la differenza di quadrati:</p>
+                            <p>$$x^2 - 1 = (x-1)(x+1)$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Semplificazione</div>
+                            <p>$$\frac{x^2-1}{x-1} = \frac{(x-1)(x+1)}{x-1} = x+1 \text{ per } x \neq 1$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Calcolo del limite</div>
+                            <p>$$\lim_{x \to 1} (x+1) = 1 + 1 = 2$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Non scrivere mai che il limite vale $\frac{0}{0}$! Questa è una forma indeterminata che va risolta, non un risultato!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 6 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 6</span> $\lim_{x \to +\infty} (4x - 7)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $+\infty$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Analisi della funzione</div>
+                            <p>$f(x) = 4x - 7$ è una funzione lineare con coefficiente angolare positivo ($m = 4 > 0$).</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Comportamento all'infinito</div>
+                            <p>Per $x \to +\infty$, il termine dominante è $4x$ che tende a $+\infty$.</p>
+                            <p>$$\lim_{x \to +\infty} (4x - 7) = +\infty$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 7 - Forma infinito/infinito -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 7</span> $\lim_{x \to +\infty} \frac{x^2 + 2x - 8}{2 - 5x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $-\infty$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Verifica della forma</div>
+                            <p>Per $x \to +\infty$: numeratore $\to +\infty$, denominatore $\to -\infty$</p>
+                            <p><strong>Forma indeterminata $\frac{\infty}{\infty}$</strong></p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Raccoglimento dei termini di grado massimo</div>
+                            <p>$$\frac{x^2 + 2x - 8}{2 - 5x} = \frac{x^2\left(1 + \frac{2}{x} - \frac{8}{x^2}\right)}{x\left(\frac{2}{x} - 5\right)}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Semplificazione</div>
+                            <p>$$= \frac{x\left(1 + \frac{2}{x} - \frac{8}{x^2}\right)}{\frac{2}{x} - 5}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Calcolo del limite</div>
+                            <p>Per $x \to +\infty$: $\frac{2}{x} \to 0$, $\frac{8}{x^2} \to 0$</p>
+                            <p>$$\lim_{x \to +\infty} \frac{x \cdot 1}{0 - 5} = \lim_{x \to +\infty} \frac{x}{-5} = -\infty$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Non dividere numeratore e denominatore per $x$ invece di $x^2$! Si deve sempre raccogliere la potenza di grado massimo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 8 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 8</span> $\lim_{x \to +\infty} (x^2 - 2x)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $+\infty$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Forma apparente</div>
+                            <p>Sembrerebbe $+\infty - \infty$ (forma indeterminata), ma non lo è!</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Raccoglimento</div>
+                            <p>$$x^2 - 2x = x^2\left(1 - \frac{2}{x}\right)$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo</div>
+                            <p>Per $x \to +\infty$: $\frac{2}{x} \to 0$</p>
+                            <p>$$\lim_{x \to +\infty} x^2\left(1 - \frac{2}{x}\right) = (+\infty) \cdot 1 = +\infty$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Non pensare che $+\infty - \infty = 0$! Questa è una forma indeterminata. In questo caso il termine $x^2$ domina su $2x$.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 9 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 9</span> $\lim_{x \to +\infty} \frac{3x^2 + 2x^4 - 5}{2x^2 + 5x + 6}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $+\infty$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Individuare i gradi</div>
+                            <p>Numeratore: grado massimo = 4 (termine $2x^4$)</p>
+                            <p>Denominatore: grado massimo = 2 (termine $2x^2$)</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Raccogliere $x^4$ al numeratore e $x^2$ al denominatore</div>
+                            <p>$$\frac{x^4\left(\frac{3}{x^2} + 2 - \frac{5}{x^4}\right)}{x^2\left(2 + \frac{5}{x} + \frac{6}{x^2}\right)}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Semplificazione</div>
+                            <p>$$= \frac{x^2\left(\frac{3}{x^2} + 2 - \frac{5}{x^4}\right)}{2 + \frac{5}{x} + \frac{6}{x^2}}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Limite</div>
+                            <p>Per $x \to +\infty$, tutti i termini con $x$ al denominatore tendono a 0:</p>
+                            <p>$$\lim_{x \to +\infty} \frac{x^2 \cdot 2}{2} = \lim_{x \to +\infty} x^2 = +\infty$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 10 - Radice -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 10</span> $\lim_{x \to 4} \sqrt{2x + 1}$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 3</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Continuità della radice</div>
+                            <p>La funzione $\sqrt{x}$ è continua per $x \geq 0$.</p>
+                            <p>Per $x = 4$: $2x + 1 = 9 > 0$ ✓</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Sostituzione</div>
+                            <p>$$\lim_{x \to 4} \sqrt{2x + 1} = \sqrt{2 \cdot 4 + 1} = \sqrt{9} = 3$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 11 - Esponenziale -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 11</span> $\lim_{x \to 0} e^x$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 1</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Funzione continua</div>
+                            <p>$f(x) = e^x$ è continua in $\mathbb{R}$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Calcolo</div>
+                            <p>$$\lim_{x \to 0} e^x = e^0 = 1$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 12 - Logaritmo -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 12</span> $\lim_{x \to 0} \ln\frac{x+3}{2x+1}$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $\ln 3$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Verifica argomento del logaritmo</div>
+                            <p>Per $x = 0$: $\frac{0+3}{2 \cdot 0+1} = \frac{3}{1} = 3 > 0$ ✓</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Continuità</div>
+                            <p>Il logaritmo è continuo per argomenti positivi.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo</div>
+                            <p>$$\lim_{x \to 0} \ln\frac{x+3}{2x+1} = \ln\frac{3}{1} = \ln 3$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 13 - Funzioni goniometriche -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 13</span> $\lim_{x \to \frac{\pi}{2}} (\sin x + \cos x)$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 1</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Funzioni continue</div>
+                            <p>$\sin x$ e $\cos x$ sono continue in $\mathbb{R}$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Sostituzione</div>
+                            <p>$$\lim_{x \to \frac{\pi}{2}} (\sin x + \cos x) = \sin\frac{\pi}{2} + \cos\frac{\pi}{2} = 1 + 0 = 1$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 14 - Limite con valore assoluto -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 14</span> $\lim_{x \to 0} |x - 1|$ <span class="difficulty facile">Facile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 1</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Analisi del valore assoluto</div>
+                            <p>Per $x = 0$: $|0 - 1| = |-1| = 1$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Continuità</div>
+                            <p>La funzione valore assoluto è continua.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Risultato</div>
+                            <p>$$\lim_{x \to 0} |x - 1| = |0 - 1| = 1$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio 15 - Differenza di radici -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. 15</span> $\lim_{x \to +\infty} \left(\sqrt{x^2 - 5x} - x\right)$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $-\frac{5}{2}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Forma indeterminata</div>
+                            <p>$\sqrt{x^2 - 5x} \to +\infty$ e $x \to +\infty$</p>
+                            <p><strong>Forma $+\infty - \infty$</strong></p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Razionalizzazione</div>
+                            <p>Moltiplichiamo e dividiamo per il coniugato:</p>
+                            <p>$$\frac{\left(\sqrt{x^2-5x} - x\right)\left(\sqrt{x^2-5x} + x\right)}{\sqrt{x^2-5x} + x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Semplificazione</div>
+                            <p>$$= \frac{x^2 - 5x - x^2}{\sqrt{x^2-5x} + x} = \frac{-5x}{\sqrt{x^2-5x} + x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Raccoglimento di $x$</div>
+                            <p>$$= \frac{-5x}{x\left(\sqrt{1-\frac{5}{x}} + 1\right)} = \frac{-5}{\sqrt{1-\frac{5}{x}} + 1}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 5: Limite</div>
+                            <p>$$\lim_{x \to +\infty} \frac{-5}{\sqrt{1-\frac{5}{x}} + 1} = \frac{-5}{\sqrt{1} + 1} = \frac{-5}{2}$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Non dimenticare di moltiplicare per il coniugato quando hai differenze di radici!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB ESERCIZI AVANZATI -->
+        <div id="esercizi-avanzati" class="tab-content">
+            <h2>Esercizi Avanzati e Applicazioni</h2>
+            <p style="margin-bottom: 20px;">Esercizi più complessi e applicazioni pratiche dei limiti.</p>
+
+            <!-- Esercizio Avanzato 1 - Limite notevole sen/x -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A1</span> $\lim_{x \to 0} \frac{\sin 5x}{2x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $\frac{5}{2}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Forma indeterminata</div>
+                            <p>Per $x \to 0$: $\sin 5x \to 0$ e $2x \to 0$</p>
+                            <p><strong>Forma $\frac{0}{0}$</strong> → usiamo il limite notevole</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Limite notevole</div>
+                            <p>Ricordiamo che: $\lim_{t \to 0} \frac{\sin t}{t} = 1$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Manipolazione</div>
+                            <p>$$\frac{\sin 5x}{2x} = \frac{5}{2} \cdot \frac{\sin 5x}{5x}$$</p>
+                            <p>Poniamo $t = 5x$. Per $x \to 0$, anche $t \to 0$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Calcolo</div>
+                            <p>$$\lim_{x \to 0} \frac{\sin 5x}{2x} = \frac{5}{2} \cdot \lim_{t \to 0} \frac{\sin t}{t} = \frac{5}{2} \cdot 1 = \frac{5}{2}$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Per usare il limite notevole $\frac{\sin t}{t} = 1$, l'argomento del seno deve essere uguale al denominatore! Devi sempre "aggiustare" moltiplicando per le costanti opportune.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio Avanzato 2 -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A2</span> $\lim_{x \to 0} \frac{1 - \cos 3x}{5x \sin x}$ <span class="difficulty difficile">Difficile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $\frac{3}{10}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Forma indeterminata $\frac{0}{0}$</div>
+                            <p>Per $x \to 0$: numeratore $\to 0$, denominatore $\to 0$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Limiti notevoli necessari</div>
+                            <p>• $\lim_{t \to 0} \frac{\sin t}{t} = 1$</p>
+                            <p>• $\lim_{t \to 0} \frac{1 - \cos t}{t^2} = \frac{1}{2}$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Riscrittura</div>
+                            <p>$$\frac{1 - \cos 3x}{5x \sin x} = \frac{1 - \cos 3x}{(3x)^2} \cdot \frac{(3x)^2}{5x \sin x}$$</p>
+                            <p>$$= \frac{1 - \cos 3x}{9x^2} \cdot \frac{9x^2}{5x \sin x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Separazione</div>
+                            <p>$$= \frac{1 - \cos 3x}{9x^2} \cdot \frac{9x}{\sin x} \cdot \frac{x}{5}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 5: Applicazione limiti notevoli</div>
+                            <p>$$\lim_{x \to 0} \frac{1 - \cos 3x}{9x^2} = \frac{1}{2}$$</p>
+                            <p>$$\lim_{x \to 0} \frac{x}{\sin x} = 1$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 6: Risultato finale</div>
+                            <p>$$\frac{1}{2} \cdot 1 \cdot \frac{9}{5} = \frac{9}{10} \cdot \frac{1}{2} = \frac{3}{10}$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio Avanzato 3 - Esponenziale -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A3</span> $\lim_{x \to 0} \frac{e^{3x} - 1}{5x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $\frac{3}{5}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Limite notevole esponenziale</div>
+                            <p>Ricordiamo: $\lim_{t \to 0} \frac{e^t - 1}{t} = 1$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Adattamento</div>
+                            <p>$$\frac{e^{3x} - 1}{5x} = \frac{3}{5} \cdot \frac{e^{3x} - 1}{3x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Sostituzione</div>
+                            <p>Poniamo $t = 3x$. Per $x \to 0$, anche $t \to 0$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Calcolo</div>
+                            <p>$$\lim_{x \to 0} \frac{e^{3x} - 1}{5x} = \frac{3}{5} \cdot \lim_{t \to 0} \frac{e^t - 1}{t} = \frac{3}{5} \cdot 1 = \frac{3}{5}$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio Avanzato 4 - Numero e -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A4</span> $\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^{3x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $e^3$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Limite notevole fondamentale</div>
+                            <p>$$\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Riscrittura</div>
+                            <p>$$\left(1 + \frac{1}{x}\right)^{3x} = \left[\left(1 + \frac{1}{x}\right)^x\right]^3$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo</div>
+                            <p>$$\lim_{x \to \infty} \left[\left(1 + \frac{1}{x}\right)^x\right]^3 = e^3$$</p>
+                        </div>
+                        <div class="error-box">
+                            <h4>❌ Errore comune</h4>
+                            <p>Ricorda: $\left(1 + \frac{1}{x}\right)^{3x} \neq 3\left(1 + \frac{1}{x}\right)^{x}$</p>
+                            <p>L'esponente va messo all'esterno: $\left[\left(1 + \frac{1}{x}\right)^{x}\right]^3$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio Avanzato 5 - Logaritmo -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A5</span> $\lim_{x \to 0} \frac{\ln(1 + 3x)}{x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 3</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Limite notevole logaritmico</div>
+                            <p>$$\lim_{t \to 0} \frac{\ln(1+t)}{t} = 1$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Adattamento</div>
+                            <p>$$\frac{\ln(1 + 3x)}{x} = 3 \cdot \frac{\ln(1 + 3x)}{3x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Sostituzione</div>
+                            <p>Poniamo $t = 3x$. Per $x \to 0$, anche $t \to 0$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Risultato</div>
+                            <p>$$\lim_{x \to 0} \frac{\ln(1 + 3x)}{x} = 3 \cdot \lim_{t \to 0} \frac{\ln(1+t)}{t} = 3 \cdot 1 = 3$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicazione 1 - Velocità istantanea -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">App. 1</span> 🚗 Velocità Istantanea <span class="difficulty medio">Applicazione</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="pratica">
+                        <h4>📋 Problema</h4>
+                        <p>Un'automobile si muove secondo la legge oraria $s(t) = 5t^2 + 2t$ (spazio in metri, tempo in secondi).</p>
+                        <p><strong>Calcola la velocità istantanea a $t = 3$ secondi.</strong></p>
+                    </div>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Concetto teorico</div>
+                            <p>La velocità istantanea è il limite del rapporto incrementale:</p>
+                            <p>$$v(t_0) = \lim_{h \to 0} \frac{s(t_0 + h) - s(t_0)}{h}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 1: Calcolo di $s(3)$ e $s(3+h)$</div>
+                            <p>$s(3) = 5 \cdot 3^2 + 2 \cdot 3 = 45 + 6 = 51$ m</p>
+                            <p>$s(3+h) = 5(3+h)^2 + 2(3+h)$</p>
+                            <p>$= 5(9 + 6h + h^2) + 6 + 2h$</p>
+                            <p>$= 45 + 30h + 5h^2 + 6 + 2h = 51 + 32h + 5h^2$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Rapporto incrementale</div>
+                            <p>$$\frac{s(3+h) - s(3)}{h} = \frac{51 + 32h + 5h^2 - 51}{h} = \frac{32h + 5h^2}{h}$$</p>
+                            <p>$$= \frac{h(32 + 5h)}{h} = 32 + 5h$$ (per $h \neq 0$)</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Limite</div>
+                            <p>$$v(3) = \lim_{h \to 0} (32 + 5h) = 32 \text{ m/s}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione</div>
+                            <p>La velocità istantanea dell'automobile a $t = 3$ s è <strong>32 m/s</strong> (circa 115 km/h).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicazione 2 - Temperatura -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">App. 2</span> 🌡️ Raffreddamento di un Oggetto <span class="difficulty medio">Applicazione</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="pratica">
+                        <h4>📋 Problema</h4>
+                        <p>Un pezzo di metallo viene riscaldato e poi lasciato raffreddare. La sua temperatura è descritta da:</p>
+                        <p>$$T(t) = 20 + 180 \cdot e^{-0.1t}$$</p>
+                        <p>dove $T$ è in °C e $t$ in minuti.</p>
+                        <p><strong>Quale sarà la temperatura dopo molto tempo?</strong></p>
+                    </div>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Interpretazione matematica</div>
+                            <p>Dobbiamo calcolare: $\lim_{t \to +\infty} T(t)$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Analisi del termine esponenziale</div>
+                            <p>$$\lim_{t \to +\infty} e^{-0.1t} = \lim_{t \to +\infty} \frac{1}{e^{0.1t}} = 0$$</p>
+                            <p>Perché l'esponenziale con esponente $\to +\infty$ tende a $+\infty$.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo del limite</div>
+                            <p>$$\lim_{t \to +\infty} T(t) = \lim_{t \to +\infty} (20 + 180 \cdot e^{-0.1t})$$</p>
+                            <p>$$= 20 + 180 \cdot 0 = 20 \text{ °C}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione fisica</div>
+                            <p>Il metallo si raffredda tendendo asintoticamente alla <strong>temperatura ambiente di 20°C</strong>.</p>
+                            <p>La retta $y = 20$ è un asintoto orizzontale per il grafico di $T(t)$.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicazione 3 - Crescita popolazione -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">App. 3</span> 📈 Crescita di una Popolazione Batterica <span class="difficulty medio">Applicazione</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="pratica">
+                        <h4>📋 Problema</h4>
+                        <p>Una colonia di batteri cresce secondo il modello:</p>
+                        <p>$$N(t) = \frac{5000}{1 + 49 \cdot e^{-0.5t}}$$</p>
+                        <p>dove $N(t)$ è il numero di batteri dopo $t$ ore.</p>
+                        <p><strong>Quale sarà la popolazione massima teorica raggiungibile?</strong></p>
+                    </div>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Formulazione matematica</div>
+                            <p>Cerchiamo: $\lim_{t \to +\infty} N(t)$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Analisi dell'esponenziale</div>
+                            <p>$$\lim_{t \to +\infty} e^{-0.5t} = \lim_{t \to +\infty} \frac{1}{e^{0.5t}} = \frac{1}{+\infty} = 0$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Calcolo del limite</div>
+                            <p>$$\lim_{t \to +\infty} N(t) = \lim_{t \to +\infty} \frac{5000}{1 + 49 \cdot e^{-0.5t}}$$</p>
+                            <p>$$= \frac{5000}{1 + 49 \cdot 0} = \frac{5000}{1} = 5000$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione biologica</div>
+                            <p>La popolazione batterica tende asintoticamente a <strong>5000 individui</strong>, che rappresenta la <em>capacità portante</em> dell'ambiente.</p>
+                            <p>Questo è un classico modello di <strong>crescita logistica</strong>.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Verifica iniziale</div>
+                            <p>A $t = 0$: $N(0) = \frac{5000}{1 + 49} = \frac{5000}{50} = 100$ batteri</p>
+                            <p>La popolazione cresce da 100 a 5000.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicazione 4 - Decadimento radioattivo -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">App. 4</span> ☢️ Decadimento Radioattivo <span class="difficulty medio">Applicazione</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="pratica">
+                        <h4>📋 Problema</h4>
+                        <p>La quantità di una sostanza radioattiva presente in un campione dopo $t$ anni è:</p>
+                        <p>$$Q(t) = Q_0 \cdot e^{-0.03t}$$</p>
+                        <p>dove $Q_0 = 100$ grammi è la quantità iniziale.</p>
+                        <p><strong>Quanta sostanza rimarrà dopo un tempo lunghissimo?</strong></p>
+                    </div>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Limite da calcolare</div>
+                            <p>$$\lim_{t \to +\infty} Q(t) = \lim_{t \to +\infty} 100 \cdot e^{-0.03t}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Comportamento esponenziale negativo</div>
+                            <p>$$e^{-0.03t} = \frac{1}{e^{0.03t}}$$</p>
+                            <p>Per $t \to +\infty$: $e^{0.03t} \to +\infty$</p>
+                            <p>Quindi: $\frac{1}{e^{0.03t}} \to 0$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Risultato</div>
+                            <p>$$\lim_{t \to +\infty} 100 \cdot e^{-0.03t} = 100 \cdot 0 = 0$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione fisica</div>
+                            <p>Dopo un tempo sufficientemente lungo, la sostanza radioattiva si esaurisce completamente (tende a 0).</p>
+                            <p>Questo è il fenomeno del <strong>decadimento esponenziale</strong>.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Tempo di dimezzamento</div>
+                            <p>Il <em>tempo di dimezzamento</em> $t_{1/2}$ si trova da:</p>
+                            <p>$$Q_0 \cdot e^{-0.03t_{1/2}} = \frac{Q_0}{2}$$</p>
+                            <p>$$e^{-0.03t_{1/2}} = \frac{1}{2} \Rightarrow t_{1/2} = \frac{\ln 2}{0.03} \approx 23.1 \text{ anni}$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio con gerarchia infiniti -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A6</span> $\lim_{x \to +\infty} \frac{x^3 + 5x^2\ln x - 3e^x}{2e^x - x^4}$ <span class="difficulty difficile">Difficile</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: $-\frac{3}{2}$</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Applicazione della gerarchia degli infiniti</div>
+                            <p>Al numeratore sono presenti: $x^3$, $x^2\ln x$, $e^x$</p>
+                            <p>Al denominatore: $e^x$, $x^4$</p>
+                            <p>Per la gerarchia: <span class="highlight">$e^x$ domina su tutte le potenze e i logaritmi</span></p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Identificazione dei termini dominanti</div>
+                            <p>Numeratore: il termine dominante è $-3e^x$</p>
+                            <p>Denominatore: il termine dominante è $2e^x$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Semplificazione</div>
+                            <p>Per $x$ molto grande, il limite è equivalente a:</p>
+                            <p>$$\lim_{x \to +\infty} \frac{-3e^x}{2e^x}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Risultato</div>
+                            <p>$$\lim_{x \to +\infty} \frac{-3e^x}{2e^x} = \frac{-3}{2}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Verifica formale (metodo algebrico)</div>
+                            <p>Raccogliamo $e^x$ al numeratore e al denominatore:</p>
+                            <p>$$\frac{e^x\left(\frac{x^3}{e^x} + \frac{5x^2\ln x}{e^x} - 3\right)}{e^x\left(2 - \frac{x^4}{e^x}\right)}$$</p>
+                            <p>Per la gerarchia: $\frac{x^3}{e^x} \to 0$, $\frac{x^2\ln x}{e^x} \to 0$, $\frac{x^4}{e^x} \to 0$</p>
+                            <p>$$= \frac{0 + 0 - 3}{2 - 0} = -\frac{3}{2}$$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicazione 5 - Carica condensatore -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">App. 5</span> ⚡ Carica di un Condensatore <span class="difficulty medio">Applicazione</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="pratica">
+                        <h4>📋 Problema</h4>
+                        <p>In un circuito RC, la carica $Q(t)$ di un condensatore in funzione del tempo è:</p>
+                        <p>$$Q(t) = Q_{max}(1 - e^{-\frac{t}{RC}})$$</p>
+                        <p>dove $Q_{max} = 10^{-6}$ C, $R = 1000$ Ω, $C = 10^{-6}$ F.</p>
+                        <p><strong>Quale carica raggiunge il condensatore dopo molto tempo?</strong></p>
+                    </div>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Dati del problema</div>
+                            <p>$RC = 1000 \cdot 10^{-6} = 10^{-3}$ s (costante di tempo)</p>
+                            <p>$$Q(t) = 10^{-6}(1 - e^{-1000t})$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Limite per $t \to +\infty$</div>
+                            <p>$$\lim_{t \to +\infty} Q(t) = \lim_{t \to +\infty} 10^{-6}(1 - e^{-1000t})$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 3: Esponenziale negativo</div>
+                            <p>$$\lim_{t \to +\infty} e^{-1000t} = 0$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 4: Risultato</div>
+                            <p>$$\lim_{t \to +\infty} Q(t) = 10^{-6}(1 - 0) = 10^{-6} \text{ C} = Q_{max}$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione tecnica</div>
+                            <p>Il condensatore si carica asintoticamente raggiungendo la <strong>carica massima</strong> $Q_{max}$.</p>
+                            <p>Teoricamente raggiunge il 99% della carica massima dopo circa $5RC$ secondi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esercizio con gerarchia - logaritmo vs potenza -->
+            <div class="exercise">
+                <div class="exercise-header" onclick="toggleSection(this)">
+                    <span><span class="exercise-number">Es. A7</span> $\lim_{x \to +\infty} \frac{\ln x}{x}$ <span class="difficulty medio">Medio</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="exercise-content">
+                    <h4>Soluzione: 0</h4>
+                    <div class="solution">
+                        <div class="step">
+                            <div class="step-title">Passo 1: Gerarchia degli infiniti</div>
+                            <p>Per la gerarchia: <span class="highlight">qualsiasi potenza (anche $x^1$) cresce più velocemente del logaritmo</span></p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Passo 2: Applicazione diretta</div>
+                            <p>Poiché $x$ è di ordine superiore a $\ln x$:</p>
+                            <p>$$\lim_{x \to +\infty} \frac{\ln x}{x} = 0$$</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-title">Interpretazione</div>
+                            <p>Il logaritmo cresce così lentamente rispetto a $x$ che il rapporto tende a zero.</p>
+                            <p>Anche se entrambi tendono a $+\infty$, $x$ "vince"!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Errori comuni - Sezione speciale -->
+            <div class="teoria-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span>⚠️ ERRORI PIÙ COMUNI NEL CALCOLO DEI LIMITI</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="error-box">
+                        <h4>1. Confondere forma indeterminata con risultato</h4>
+                        <p>❌ SBAGLIATO: $\lim_{x \to 1} \frac{x^2-1}{x-1} = \frac{0}{0}$</p>
+                        <p>✅ CORRETTO: La forma $\frac{0}{0}$ è indeterminata, va risolta! Il limite vale 2.</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>2. Operazioni errate con infiniti</h4>
+                        <p>❌ SBAGLIATO: $+\infty - \infty = 0$</p>
+                        <p>❌ SBAGLIATO: $\frac{\infty}{\infty} = 1$</p>
+                        <p>✅ CORRETTO: Queste sono forme indeterminate!</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>3. Dimenticare il dominio</h4>
+                        <p>❌ SBAGLIATO: $\lim_{x \to 0} \ln x = \ln 0$</p>
+                        <p>✅ CORRETTO: $\ln x$ non è definito in 0! Si deve considerare $\lim_{x \to 0^+} \ln x = -\infty$</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>4. Raccoglimento sbagliato nei rapporti di polinomi</h4>
+                        <p>❌ SBAGLIATO: $\frac{x^2 + 3}{2x^3 - 1} = \frac{x(x+3)}{x(2x^2-1)}$</p>
+                        <p>✅ CORRETTO: Raccogliere le potenze di grado massimo:</p>
+                        <p>$$\frac{x^2(1 + \frac{3}{x^2})}{x^3(2 - \frac{1}{x^3})} = \frac{1 + \frac{3}{x^2}}{x(2 - \frac{1}{x^3})} \to \frac{1}{+\infty} = 0$$</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>5. Uso scorretto dei limiti notevoli</h4>
+                        <p>❌ SBAGLIATO: $\lim_{x \to 0} \frac{\sin 3x}{5x} = 1$</p>
+                        <p>✅ CORRETTO: Bisogna "aggiustare":</p>
+                        <p>$$\frac{\sin 3x}{5x} = \frac{3}{5} \cdot \frac{\sin 3x}{3x} \to \frac{3}{5} \cdot 1 = \frac{3}{5}$$</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>6. Confondere limite destro e sinistro</h4>
+                        <p>Per $f(x) = \frac{1}{x}$:</p>
+                        <p>$\lim_{x \to 0^+} \frac{1}{x} = +\infty$ (da destra, $x > 0$)</p>
+                        <p>$\lim_{x \to 0^-} \frac{1}{x} = -\infty$ (da sinistra, $x < 0$)</p>
+                        <p>Il limite $\lim_{x \to 0} \frac{1}{x}$ NON ESISTE!</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>7. Razionalizzazione dimenticata</h4>
+                        <p>Per limiti come $\lim_{x \to +\infty} (\sqrt{x^2+x} - x)$, è ESSENZIALE moltiplicare per il coniugato!</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>8. Segno del risultato con $x \to -\infty$</h4>
+                        <p>$$\lim_{x \to -\infty} \frac{\sqrt{4x^2 + 1}}{3x - 5}$$</p>
+                        <p>Attenzione: $\sqrt{x^2} = |x|$, quindi per $x < 0$: $\sqrt{x^2} = -x$</p>
+                        <p>$$\frac{\sqrt{4x^2(1 + \frac{1}{4x^2})}}{x(3 - \frac{5}{x})} = \frac{-2x\sqrt{1 + \frac{1}{4x^2}}}{x(3 - \frac{5}{x})} = \frac{-2}{3}$$</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>9. Ignorare la gerarchia negli infiniti</h4>
+                        <p>❌ SBAGLIATO: $\lim_{x \to +\infty} (x^{100} - e^x) = +\infty$ perché $x^{100}$ è enorme</p>
+                        <p>✅ CORRETTO: $e^x$ cresce PIÙ velocemente di $x^{100}$, quindi:</p>
+                        <p>$$\lim_{x \to +\infty} (x^{100} - e^x) = -\infty$$</p>
+                    </div>
+
+                    <div class="error-box">
+                        <h4>10. Dimenticare il valore assoluto sotto radice</h4>
+                        <p>$$\lim_{x \to -\infty} \sqrt{x^2 + 1}$$</p>
+                        <p>❌ SBAGLIATO: $= \lim_{x \to -\infty} x\sqrt{1 + \frac{1}{x^2}} = -\infty \cdot 1$</p>
+                        <p>✅ CORRETTO: $\sqrt{x^2} = |x|$, quindi per $x < 0$:</p>
+                        <p>$$\sqrt{x^2 + 1} = |x|\sqrt{1 + \frac{1}{x^2}} = -x\sqrt{1 + \frac{1}{x^2}}$$</p>
+                        <p>$$\lim_{x \to -\infty} (-x) \cdot 1 = +\infty$$</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabs;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                icon.classList.remove('open');
+            } else {
+                content.classList.add('show');
+                icon.classList.add('open');
+            }
+        }
+    </script>
+</body>
+</html>
